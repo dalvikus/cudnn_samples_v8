@@ -94,7 +94,8 @@ def load_weights(tag, fname, nheads):
     if (np.shape(w)[0] % nheads != 0):
         print("Number of rows=%d is not divisible by nheads=%d in file '%s'" % (np.shape(w)[0], nheads, fname))
         sys.exit()
-    w = np.reshape(w, (nheads, np.shape(w)[0] / nheads, np.shape(w)[1]))
+    assert np.shape(w)[0] % nheads == 0
+    w = np.reshape(w, (nheads, np.shape(w)[0] // nheads, np.shape(w)[1]))
     print("Loaded [%s] of %s weights from '%s'" % ("x".join(map(str, np.shape(w))), tag, fname))
     return w
 
@@ -105,7 +106,7 @@ def compare(tag, a, b, rtol, atol):
 
     # Same condition as allclose() but with indices.
     tol = atol + rtol * abs(b)
-    indices = np.transpose(np.where(abs(a - b) > tol))
+    indices = np.transpose(np.where(abs(a - b) > tol)).flatten()
     status = "PASS" if len(indices) == 0 else "FAIL"
 
     rel_err = max(np.abs(a - b) / b)
