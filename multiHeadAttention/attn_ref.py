@@ -94,7 +94,8 @@ def load_weights(tag, fname, nheads):
     if (np.shape(w)[0] % nheads != 0):
         print("Number of rows=%d is not divisible by nheads=%d in file '%s'" % (np.shape(w)[0], nheads, fname))
         sys.exit()
-    w = np.reshape(w, (nheads, np.shape(w)[0] / nheads, np.shape(w)[1]))
+    assert np.shape(w)[0] % nheads == 0
+    w = np.reshape(w, (nheads, np.shape(w)[0] // nheads, np.shape(w)[1]))
     print("Loaded [%s] of %s weights from '%s'" % ("x".join(map(str, np.shape(w))), tag, fname))
     return w
 
