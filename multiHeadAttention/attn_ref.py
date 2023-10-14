@@ -106,7 +106,7 @@ def compare(tag, a, b, rtol, atol):
 
     # Same condition as allclose() but with indices.
     tol = atol + rtol * abs(b)
-    indices = np.transpose(np.where(abs(a - b) > tol))
+    indices = np.transpose(np.where(abs(a - b) > tol)).flatten()
     status = "PASS" if len(indices) == 0 else "FAIL"
 
     rel_err = max(np.abs(a - b) / b)
